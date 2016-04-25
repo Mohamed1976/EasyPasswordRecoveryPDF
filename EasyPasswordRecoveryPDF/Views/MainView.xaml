@@ -1,0 +1,1093 @@
+﻿<Window x:Class="EasyPasswordRecoveryPDF.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:EasyPasswordRecoveryPDF.Views"
+        xmlns:converters="clr-namespace:EasyPasswordRecoveryPDF.Converters"
+        xmlns:defines="clr-namespace:EasyPasswordRecoveryPDF.Common"
+        xmlns:common="clr-namespace:EasyPasswordRecoveryPDF.Common"
+        xmlns:viewmodels="clr-namespace:EasyPasswordRecoveryPDF.ViewModels"
+        xmlns:behaviors="clr-namespace:EasyPasswordRecoveryPDF.Behaviors"
+        xmlns:views="clr-namespace:EasyPasswordRecoveryPDF.Views"
+        mc:Ignorable="d"
+        Title="Easy Password Recovery PDF"
+        Icon="/Resources/Icons/PdfLogo128x128.ico"
+        Height="775" Width="850">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Dictionary/ResourceLibrary.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"></RowDefinition>
+            <RowDefinition Height="85*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!-- Header panel, visible in all views -->
+        <Grid Grid.Row="0" Background="{StaticResource DefaultGridBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*"></ColumnDefinition>
+                <ColumnDefinition Width="20*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" 
+                        Orientation="Horizontal" 
+                        FlowDirection="LeftToRight">
+                <Rectangle Margin="10,0,0,0"
+                           Width="40" 
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Fill="{StaticResource PdfLogo}"></Rectangle>
+                <TextBlock FontSize="36" 
+                           Foreground="Black" 
+                           Text="Easy Password Recovery" 
+                           VerticalAlignment="Center" 
+                           Margin="10,0,0,0"></TextBlock>
+                <TextBlock FontSize="36" 
+                           FontWeight="Bold" 
+                           Foreground="Red" 
+                           Text="PDF" 
+                           Margin="10,0,0,0" 
+                           VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" 
+                        Grid.Column="1" 
+                        FlowDirection="RightToLeft">
+                <Button ToolTip="Select Home view"
+                        Width="50"
+                        Height="60"
+                        BorderThickness="0"
+                        Background="Transparent"                        
+                        VerticalAlignment="Bottom"
+                        Command="{Binding SelectViewCmd}"
+                        CommandParameter="{x:Static common:AvailableViews.Home}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Vertical"
+                                FlowDirection="LeftToRight">
+                        <Rectangle Width="32" 
+                                   Height="32"
+                                   HorizontalAlignment="Center"
+                                   Fill="{StaticResource Home}"></Rectangle>
+                        <TextBlock FontSize="12"                                       
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="Home"></TextBlock>
+                    </StackPanel>
+                </Button>
+                <Rectangle Height="50" 
+                           Width="1" 
+                           Fill="Black" 
+                           VerticalAlignment="Bottom" 
+                           Margin="2,0,2,10"></Rectangle>
+                <Button ToolTip="Select Settings view"
+                        Width="50"
+                        Height="60"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="0,0,0,0"                        
+                        VerticalAlignment="Bottom"                        
+                        Command="{Binding SelectViewCmd}"
+                        CommandParameter="{x:Static common:AvailableViews.Settings}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Vertical">
+                        <Rectangle Width="32" 
+                                   Height="32"
+                                   HorizontalAlignment="Center"
+                                   Fill="{StaticResource Settings}"/>
+                        <TextBlock FontSize="12"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="Settings"/>
+                    </StackPanel>
+                </Button>
+                <Rectangle Height="50" 
+                           Width="1" 
+                           Fill="Black" 
+                           VerticalAlignment="Bottom" 
+                           Margin="2,0,2,10"></Rectangle>
+                <Button ToolTip="Select About view"                        
+                        Width="50"
+                        Height="60"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="0,0,0,0"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding SelectViewCmd}"
+                        CommandParameter="{x:Static common:AvailableViews.About}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Vertical"
+                                FlowDirection="LeftToRight">
+                        <Rectangle Width="32" 
+                                   Height="32"
+                                   HorizontalAlignment="Center"
+                                   Fill="{StaticResource About}"></Rectangle>
+                        <TextBlock FontSize="12"                                       
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="About"></TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Bottom panel, hidden for views other than the Home view -->
+        <Grid Grid.Row="2" 
+              Background="LightGray">
+            <Grid.Visibility>
+                <Binding Path="SelectedView" 
+                         Mode="OneWay" 
+                         UpdateSourceTrigger="PropertyChanged" 
+                         ConverterParameter="{x:Static common:AvailableViews.Home}">
+                    <Binding.Converter>
+                        <converters:EnumToVisibilityConverter></converters:EnumToVisibilityConverter>
+                    </Binding.Converter>
+                </Binding>
+            </Grid.Visibility>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StatusBar Grid.Column="0" 
+                       VerticalAlignment="Bottom" 
+                       Background="LightGray">
+                <StatusBarItem>
+                    <Grid>
+                        <ProgressBar Width="100" 
+                                     Height="20"
+                                     IsIndeterminate="{Binding Path=IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        </ProgressBar>
+                    </Grid>
+                </StatusBarItem>
+                <Separator></Separator>
+                <StatusBarItem>
+                    <Label Content="{Binding Path=Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="12"
+                           HorizontalContentAlignment="Left" 
+                           VerticalAlignment="Center" 
+                           MinWidth="200"
+                           Height="26"></Label>
+                </StatusBarItem>
+            </StatusBar>
+            <StackPanel Grid.Column="1"
+                        Background="LightGray"
+                        Orientation="Horizontal"
+                        FlowDirection="RightToLeft">
+                <Button ToolTip="Cancel decryption process"
+                        Width="100"
+                        Height="23"
+                        IsCancel="true"
+                        FontSize="14"
+                        Margin="8,0"
+                        VerticalAlignment="Center"
+                        Command="{Binding CancelCmd}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                        <TextBlock Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="Cancel"></TextBlock>
+                        <Rectangle Margin="10,0,0,0"
+                                   Width="16" 
+                                   Height="16"
+                                   VerticalAlignment="Center"
+                                   Fill="{StaticResource Cancel}"></Rectangle>
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Start decryption process"
+                        Width="100"
+                        Height="23"
+                        IsDefault="true"
+                        FontSize="14"
+                        Margin="8,0"
+                        VerticalAlignment="Center"
+                        Command="{Binding DecryptCmd}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal"
+                                FlowDirection="LeftToRight">
+                        <Rectangle Margin="10,0,0,0"
+                                   Width="16" 
+                                   Height="16"
+                                   VerticalAlignment="Center"
+                                   Stretch="Uniform"
+                                   Fill="{StaticResource OK}"></Rectangle>
+                        <TextBlock Margin="5,0,0,0" 
+                                   VerticalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="Decrypt"></TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Home view -->
+        <GroupBox Grid.Row="1" 
+                  Margin="5,5,5,5"
+                  BorderBrush="Blue"
+                  BorderThickness="2">
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Setter Property="Header">
+                        <Setter.Value>
+                            <TextBlock FontWeight="Bold"
+                                       Text="{Binding Source={x:Static common:AvailableViews.Home}}"
+                                       TextWrapping="NoWrap"
+                                       Style="{DynamicResource GroupboxHeaderStyle}" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Visibility">
+                        <Setter.Value>
+                            <Binding Path="SelectedView" 
+                                     Mode="OneWay" 
+                                     UpdateSourceTrigger="PropertyChanged" 
+                                     ConverterParameter="{x:Static common:AvailableViews.Home}">
+                                <Binding.Converter>
+                                    <converters:EnumToVisibilityConverter></converters:EnumToVisibilityConverter>
+                                </Binding.Converter>
+                            </Binding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="IsEnabled" Value="True"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <Grid Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="21*"></RowDefinition>
+                    <RowDefinition Height="55*"></RowDefinition>
+                    <RowDefinition Height="24*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="0"
+                      Margin="5,5,5,5" 
+                      BorderBrush="Blue" 
+                      BorderThickness="1">
+                    <GroupBox.Header>
+                        <TextBlock Text="PDF file"
+                               TextWrapping="NoWrap"
+                               Style="{DynamicResource GroupboxHeaderStyle}" />
+                    </GroupBox.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70*"></RowDefinition>
+                            <RowDefinition Height="30*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="40"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid ToolTip="Drag &amp; drop one PDF file to decrypt."
+                                  Grid.Column="0"
+                                  Grid.Row="0"
+                                  SelectedItem="{Binding Path=SelectedFile, Mode=OneWay}"
+                                  ItemsSource="{Binding PdfFiles, Mode=OneWay}"
+                                  Margin="5,5,5,5"
+                                  behaviors:DoubleClickCommandBehavior.DoubleClickCommand="{Binding ShowFilePropertiesCmd}">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem ToolTip="Add PDF file to decrypt"
+                                              Header="Add PDF file" 
+                                              Command="{Binding AddFileCmd}">
+                                        <MenuItem.Icon>
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{StaticResource Plus}"></Rectangle>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem ToolTip="Remove PDF file from list"
+                                              Header="Remove selected PDF file"
+                                              Command="{Binding RemoveFileCmd}">
+                                        <MenuItem.Icon>
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{StaticResource Minus}"></Rectangle>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator></Separator>
+                                    <MenuItem ToolTip="Open PDF file in webbrowser"
+                                              Header="Open PDF file" 
+                                              Command="{Binding OpenFileCmd}">
+                                        <MenuItem.Icon>
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{StaticResource OpenFile}"></Rectangle>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem ToolTip="Show PDF file properties"
+                                              Header="Show PDF file properties"                                          
+                                              Command="{Binding ShowFilePropertiesCmd}">
+                                        <MenuItem.Icon>
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{StaticResource ShowFilePropertiesIcon}"></Rectangle>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator></Separator>
+                                    <MenuItem ToolTip="Unlock protected PDF using user or owner password"
+                                              Header="Manually unlock PDF file" 
+                                              Command="{Binding UnlockCmd}">
+                                        <MenuItem.Icon>
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{StaticResource Lock}"></Rectangle>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40*"
+                                                    Binding="{Binding Info.Name, Mode=OneTime}"
+                                                    Header="Filename"></DataGridTextColumn>
+                                <DataGridTextColumn Width="70*"
+                                                    Binding="{Binding Info.DirectoryName, Mode=OneTime}"
+                                                    Header="Path"></DataGridTextColumn>
+                                <DataGridTextColumn Width="65" 
+                                                    Header="Size">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Margin" Value="0,0,2,0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.Binding>
+                                        <Binding Path="Info.Length" Mode="OneTime">
+                                            <Binding.Converter>
+                                                <converters:BytesSuffixConverter></converters:BytesSuffixConverter>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Margin="10,0,0,0">U</TextBlock>
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{x:Null}"
+                                                    Focusable="False"
+                                                    ToolTip="Unlock protected PDF using user or owner password [ Ctrl+U ]" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="2" 
+                                                    Command="{Binding Path=DataContext.UnlockCmd, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                <Image>
+                                                    <Image.Style>
+                                                        <Style TargetType="{x:Type Image}">
+                                                            <Setter Property="Source" 
+                                                                    Value="/Resources/Icons/Tick_16x16.png" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding UserPasswordIsSet}" 
+                                                                             Value="True">
+                                                                    <Setter Property="Source" 
+                                                                            Value="/Resources/Icons/Lock_16x16.png" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Margin="10,0,0,0">O</TextBlock>
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{x:Null}"
+                                                    Focusable="False"
+                                                    ToolTip="Unlock protected PDF using user or owner password [ Ctrl+U ]" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="2" 
+                                                    Command="{Binding Path=DataContext.UnlockCmd, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                <Image>
+                                                    <Image.Style>
+                                                        <Style TargetType="{x:Type Image}">
+                                                            <Setter Property="Source" 
+                                                                    Value="/Resources/Icons/Tick_16x16.png" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding OwnerPasswordIsSet}" 
+                                                                             Value="True">
+                                                                    <Setter Property="Source" 
+                                                                            Value="/Resources/Icons/Lock_16x16.png" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Margin="0,5,5,0" 
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2">
+
+                            <Button Style="{x:Null}"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    ToolTip="Add PDF file"  
+                                    Margin="0,2,0,0" 
+                                    Command="{Binding AddFileCmd}">
+                                <Rectangle  Width="30"
+                                            Height="30"
+                                            HorizontalAlignment="Center"
+                                            Fill="{StaticResource Plus}"></Rectangle>
+                            </Button>
+
+                            <Button Style="{x:Null}"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    ToolTip="Delete PDF file"  
+                                    Margin="0,2,0,0" 
+                                    Command="{Binding RemoveFileCmd}">
+                                <Rectangle Width="30"
+                                           Height="30"
+                                           HorizontalAlignment="Center"
+                                           Fill="{StaticResource Minus}"></Rectangle>
+                            </Button>
+                        </StackPanel>
+
+                        <!--user grants basic access to the PDF -->
+                        <!--owner grants access and full control over PDF -->
+                        <StackPanel Grid.Row="1" 
+                                    Grid.Column="0" 
+                                    Orientation="Horizontal">
+                            <Label FontSize="12" 
+                                   VerticalAlignment="Center" 
+                                   Margin="5,0,0,0">Recover the following password(s):</Label>
+                            <CheckBox VerticalAlignment="Center" Margin="5,3,0,0">
+                                <CheckBox.IsChecked>
+                                    <Binding Path="ValidationModeRequested" 
+                                             Mode="TwoWay" 
+                                             UpdateSourceTrigger="PropertyChanged" 
+                                             ConverterParameter="{x:Static defines:ValidationMode.ValidateUserPassword}">
+                                        <Binding.Converter>
+                                            <converters:FlagsEnumValueConverter></converters:FlagsEnumValueConverter>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </CheckBox.IsChecked>
+                                <CheckBox.IsEnabled>
+                                    <Binding Path="SelectedFile.UserPasswordIsSet" 
+                                             Mode="OneWay" 
+                                             UpdateSourceTrigger="PropertyChanged" 
+                                             FallbackValue="False">
+                                    </Binding>
+                                </CheckBox.IsEnabled>
+                            </CheckBox>
+                            <Label FontSize="12" VerticalAlignment="Center" Margin="1,0,0,0">User</Label>
+                            <CheckBox VerticalAlignment="Center" Margin="5,3,0,0">
+                                <CheckBox.IsChecked>
+                                    <Binding Path="ValidationModeRequested" 
+                                             Mode="TwoWay" 
+                                             UpdateSourceTrigger="PropertyChanged" 
+                                             ConverterParameter="{x:Static defines:ValidationMode.ValidateOwnerPassword}">
+                                        <Binding.Converter>
+                                            <converters:FlagsEnumValueConverter></converters:FlagsEnumValueConverter>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </CheckBox.IsChecked>
+                                <CheckBox.IsEnabled>
+                                    <Binding Path="SelectedFile.OwnerPasswordIsSet" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" FallbackValue="False">
+                                    </Binding>
+                                </CheckBox.IsEnabled>
+                            </CheckBox>
+                            <Label  FontSize="12" VerticalAlignment="Center" Margin="1,0,0,0">Owner</Label>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1"
+                          Margin="5,5,5,5" 
+                          BorderBrush="Blue"
+                          BorderThickness="1">
+                    <GroupBox.Header>
+                        <TextBlock Text="Decryption method"
+                               TextWrapping="NoWrap"
+                               Style="{DynamicResource GroupboxHeaderStyle}" />
+                    </GroupBox.Header>
+                    <TabControl Background="LightGray"
+                                TabStripPlacement="Left"
+                                ItemsSource="{Binding TabItems, Mode=OneWay}"
+                                SelectedItem="{Binding SelectedTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <TabControl.Resources>
+                            <DataTemplate DataType="{x:Type viewmodels:DictionaryManagerViewModel}">
+                                <views:DictionaryManagerView />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type viewmodels:SmartManagerViewModel}">
+                                <views:SmartManagerView />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type viewmodels:BruteForceManagerViewModel}">
+                                <views:BruteForceManagerView />
+                            </DataTemplate>
+                        </TabControl.Resources>
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type TabItem}" >
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" 
+                                                        FlowDirection="LeftToRight">
+                                                <Rectangle Width="16"
+                                                           Height="16"
+                                                           VerticalAlignment="Center"
+                                                           Stretch="Uniform"
+                                                           Fill="{Binding HeaderIcon}"/>
+                                                <TextBlock Width="80" 
+                                                           FontSize="20" 
+                                                           Foreground="Black"  
+                                                           Margin="10 0" 
+                                                           Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
+                    </TabControl>
+                </GroupBox>
+
+                <GroupBox Grid.Row="2" 
+                          Margin="5,5,5,5" 
+                          BorderBrush="Blue" 
+                          BorderThickness="1">
+                    <GroupBox.Header>
+                        <TextBlock Text="Decryption progress"
+                                   Style="{DynamicResource GroupboxHeaderStyle}" />
+                    </GroupBox.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="0,0,1,0"
+                               HorizontalAlignment="Right"  
+                               VerticalAlignment="Center">Current password:</Label>
+                        <TextBox Margin="1"
+                                 IsEnabled="False"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 Grid.Row="0" 
+                                 Grid.RowSpan="2"
+                                 Grid.Column="1" 
+                                 Grid.ColumnSpan="3"
+                                 Text="{Binding CurrentPassword, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        </TextBox>
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Margin="0,0,1,0"
+                               HorizontalAlignment="Right"  
+                               VerticalAlignment="Center">Speed (psw/minute):</Label>
+                        <TextBox Margin="1"
+                                 IsEnabled="False"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 Grid.Row="2"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalContentAlignment="Right"
+                                 VerticalContentAlignment="Center"
+                                 Grid.Column="1"
+                                 Text="{Binding Speed, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.Row="2"
+                               Grid.Column="2"
+                               Margin="0,0,1,0"
+                               HorizontalAlignment="Right"  
+                               VerticalAlignment="Center">Nr. of passwords matched:</Label>
+
+                        <TextBox Margin="1"
+                                 IsEnabled="False"
+                                 IsReadOnly="True"                                 
+                                 TextWrapping="Wrap"
+                                 Grid.Row="2"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalContentAlignment="Right"
+                                 VerticalContentAlignment="Center"
+                                 Grid.Column="3"
+                                 Text="{Binding PasswordCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.Row="3"
+                               Grid.Column="0"
+                               Margin="0,0,1,0"
+                               HorizontalAlignment="Right"  
+                               VerticalAlignment="Center">Recovered passwords:</Label>
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                            <CheckBox  VerticalAlignment="Center" Margin="5,3,0,0" IsEnabled="False">
+                                <CheckBox.IsChecked>
+                                    <Binding Path="SelectedFile.RecoveredUserPassword" 
+                                             Mode="OneWay" 
+                                             UpdateSourceTrigger="PropertyChanged" 
+                                             FallbackValue="False">
+                                        <Binding.Converter>
+                                            <converters:StringToBooleanConverter></converters:StringToBooleanConverter>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </CheckBox.IsChecked>
+                            </CheckBox>
+                            <Label FontSize="12" 
+                                   VerticalAlignment="Center" 
+                                   Margin="1,0,0,0">User</Label>
+                            <CheckBox VerticalAlignment="Center" 
+                                      Margin="5,3,0,0" 
+                                      IsEnabled="False">
+                                <CheckBox.IsChecked>
+                                    <Binding Path="SelectedFile.RecoveredOwnerPassword" 
+                                             Mode="OneWay" 
+                                             UpdateSourceTrigger="PropertyChanged" 
+                                             FallbackValue="False">
+                                        <Binding.Converter>
+                                            <converters:StringToBooleanConverter></converters:StringToBooleanConverter>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </CheckBox.IsChecked>
+                            </CheckBox>
+                            <Label  FontSize="12" VerticalAlignment="Center" Margin="1,0,0,0">Owner</Label>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
+
+        <!-- The Settings View -->
+        <GroupBox Grid.Row="1" 
+                  Margin="5,5,5,5" 
+                  BorderBrush="Blue"
+                  BorderThickness="2">
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Setter Property="Header">
+                        <Setter.Value>
+                            <TextBlock FontWeight="Bold"
+                                       Text="{Binding Source={x:Static common:AvailableViews.Settings}}"
+                                       Style="{DynamicResource GroupboxHeaderStyle}" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Visibility">
+                        <Setter.Value>
+                            <Binding Path="SelectedView" 
+                                     Mode="OneWay" 
+                                     UpdateSourceTrigger="PropertyChanged" 
+                                     ConverterParameter="{x:Static common:AvailableViews.Settings}">
+                                <Binding.Converter>
+                                    <converters:EnumToVisibilityConverter></converters:EnumToVisibilityConverter>
+                                </Binding.Converter>
+                            </Binding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="IsEnabled" Value="True"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="1" 
+                      Margin="5,5,5,5"  
+                      BorderBrush="{StaticResource DefaultBorderBrush}" 
+                      BorderThickness="{StaticResource DefaultBorderThickness}">
+                    <GroupBox.Header>
+                        <TextBlock Text="Password Storage File"
+                               Style="{DynamicResource GroupboxHeaderStyle}" />
+                    </GroupBox.Header>
+                    <StackPanel Margin="5">
+                        <StackPanel HorizontalAlignment="Left" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                            <Label VerticalAlignment="Center" 
+                               Content="Password storage file name"></Label>
+                            <TextBox ToolTip="The recovered passwords will be saved in this file"
+                                 VerticalAlignment="Center" 
+                                 Margin="10,0,0,0"
+                                 Height="22"
+                                 Width="200">
+                                <TextBox.Text>
+                                    <Binding Path="PasswordStorageFilename" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ValidatesOnNotifyDataErrors="True"></Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                        </StackPanel>
+
+                        <Label VerticalAlignment="Center" Content="Select destination folder:"></Label>
+                        <RadioButton ToolTip="The password storage file will be saved in the source directory"
+                                 Margin="20,0,0,2.5" 
+                                 VerticalAlignment="Center"
+                                 Content="Use source folder" 
+                                 GroupName="destination">
+                            <RadioButton.IsChecked>
+                                <Binding Path="SaveOptionsPasswordFile" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:SaveOptions.UseSourceFolder}">
+                                    <Binding.Converter>
+                                        <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                    </Binding.Converter>
+                                </Binding>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+                        <StackPanel HorizontalAlignment="Left" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                            <RadioButton x:Name="rBtnSelectFolder"
+                                     ToolTip="The password storage file will be saved in the specified directory"
+                                     Margin="20,2.5,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Content="Select New folder" 
+                                     GroupName="destination">
+                                <RadioButton.IsChecked>
+                                    <Binding Path="SaveOptionsPasswordFile" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:SaveOptions.UseCustomFolder}">
+                                        <Binding.Converter>
+                                            <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </RadioButton.IsChecked>
+                            </RadioButton>
+                            <TextBox ToolTip="Directory used to store the password storage file"
+                                     IsReadOnly="True"
+                                     IsEnabled="{Binding ElementName=rBtnSelectFolder, Path=IsChecked}"
+                                     VerticalAlignment="Center" 
+                                     Margin="10,0,0,0" 
+                                     Width="200" 
+                                     Height="22"
+                                     Text="{Binding SelectedSavePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <Button ToolTip="Select directory where the password storage file will be stored" 
+                                    IsEnabled="{Binding ElementName=rBtnSelectFolder, Path=IsChecked}"
+                                VerticalAlignment="Center" 
+                                Margin="10,0,0,0"
+                                Command="{Binding SelectFolderCmd}">
+                                <StackPanel HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                    <Image Width="16" 
+                                           Height="16" 
+                                           Source="/Resources/Icons/open_16x16.png"/>
+                                    <AccessText Margin="5,0,0,0" 
+                                            VerticalAlignment="Center" 
+                                            TextWrapping="NoWrap" 
+                                            Text="Browse..."></AccessText>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <CheckBox ToolTip="Overwrite password storage file if it exists in location"
+                              IsChecked="{Binding OverwriteFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              Margin="5,3,0,0" Content="Overwrite file if exists"></CheckBox>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="0" 
+                      Margin="5,5,5,5"  
+                      BorderBrush="{StaticResource DefaultBorderBrush}" 
+                      BorderThickness="{StaticResource DefaultBorderThickness}">
+                    <GroupBox.Header>
+                        <TextBlock Text="Dictionary Settings"
+                               Style="{DynamicResource GroupboxHeaderStyle}" />
+                    </GroupBox.Header>
+                    <StackPanel Margin="5">
+                        <StackPanel HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" 
+                                    Orientation="Horizontal">
+                            <CheckBox VerticalAlignment="Center" Margin="5,3,0,0">
+                                <CheckBox.IsChecked>
+                                    <Binding Path="RemoveWhitespace" 
+                                             Mode="TwoWay"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                    </Binding>
+                                </CheckBox.IsChecked>
+                            </CheckBox>
+                            <Label FontSize="12" VerticalAlignment="Center" Margin="1,0,0,0">Remove all whitespace from strings</Label>
+                        </StackPanel>
+
+                        <Label FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="1,0,0,0">Change string casing:</Label>
+
+                        <RadioButton ToolTip="Do not change string casing in dictionary"
+                                     Margin="20,2.5,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Content="None" 
+                                     GroupName="StringCasing">
+                            <RadioButton.IsChecked>
+                                <Binding Path="PasswordCasing" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:CharsetCasing.None}">
+                                    <Binding.Converter>
+                                        <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                    </Binding.Converter>
+                                </Binding>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+
+                        <RadioButton ToolTip="Force letters in dictionary to UPPERCASE"
+                                     Margin="20,2.5,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Content="Force letters to UPPERCASE" 
+                                     GroupName="StringCasing">
+                            <RadioButton.IsChecked>
+                                <Binding Path="PasswordCasing" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:CharsetCasing.UpperCase}">
+                                    <Binding.Converter>
+                                        <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                    </Binding.Converter>
+                                </Binding>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+
+                        <RadioButton ToolTip="Force letters in dictionary to lowercase"
+                                     Margin="20,2.5,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Content="Force letters to lowercase" 
+                                     GroupName="StringCasing">
+                            <RadioButton.IsChecked>
+                                <Binding Path="PasswordCasing" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:CharsetCasing.LowerCase}">
+                                    <Binding.Converter>
+                                        <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                    </Binding.Converter>
+                                </Binding>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+
+                        <RadioButton ToolTip="Force letters in dictionary to Titlecase"
+                                     Margin="20,2.5,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Content="Force letters to Titlecase" 
+                                     GroupName="StringCasing">
+                            <RadioButton.IsChecked>
+                                <Binding Path="PasswordCasing" 
+                                         Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ConverterParameter="{x:Static common:CharsetCasing.TitleCase}">
+                                    <Binding.Converter>
+                                        <converters:EnumToBoolConverter></converters:EnumToBoolConverter>
+                                    </Binding.Converter>
+                                </Binding>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
+        
+        <!-- The About View -->
+        <GroupBox Grid.Row="1" 
+                  Margin="5,5,5,5" 
+                  BorderBrush="Blue"
+                  BorderThickness="2">
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Setter Property="Header">
+                        <Setter.Value>
+                            <TextBlock FontWeight="Bold"
+                                       Text="{Binding Source={x:Static common:AvailableViews.About}}"
+                                       Style="{DynamicResource GroupboxHeaderStyle}" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Visibility">
+                        <Setter.Value>
+                            <Binding Path="SelectedView" 
+                                     Mode="OneWay" 
+                                     UpdateSourceTrigger="PropertyChanged" 
+                                     ConverterParameter="{x:Static common:AvailableViews.About}">
+                                <Binding.Converter>
+                                    <converters:EnumToVisibilityConverter></converters:EnumToVisibilityConverter>
+                                </Binding.Converter>
+                            </Binding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="IsEnabled" Value="True"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180"></ColumnDefinition>
+                    <ColumnDefinition Width="475*"></ColumnDefinition>
+                    <ColumnDefinition Width="10*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="110"></RowDefinition>
+                    <RowDefinition Height="300*"></RowDefinition>
+                    <RowDefinition Height="10*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Image Width="64" 
+                       Height="64" 
+                       Source="/Resources/Icons/Lock_128x128.ico" 
+                       Stretch="Uniform"></Image>
+                
+                <GroupBox Grid.Row="0" 
+                          Grid.RowSpan="2" 
+                          Grid.Column="1" 
+                          Margin="10,10,10,10" 
+                          BorderBrush="{StaticResource DefaultBorderBrush}" 
+                          BorderThickness="{StaticResource DefaultBorderThickness}">
+                    <GroupBox.Header>
+                        <TextBlock TextWrapping="NoWrap"
+                                   Style="{DynamicResource GroupboxHeaderStyle}">
+                            <TextBlock.Text>
+                                <Binding Path="Title" 
+                                         Mode="OneTime"></Binding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <Label Margin="5,2,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding StringFormat="{}Product name: {0}" 
+                                                 Path="ProductName" 
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding StringFormat="{}Version: {0}" 
+                                                 Path="Version"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding StringFormat="{}Copyright: {0}" 
+                                                 Path="Copyright"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding StringFormat="{}Company name: {0}" 
+                                                 Path="CompanyName"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding StringFormat="{}Description name: {0}" 
+                                                 Path="Description"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        
+                        <Label Margin="5,20,0,0" FontSize="14.5" Content="External libraries used include:"></Label>
+
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding Path="ITextSharpVersion"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
+                        <Label Margin="5,0,0,1">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding Path="GenerexVersion"  
+                                                 Mode="OneTime"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>                         
+                        <TextBlock Margin="10,0,0,1">
+                            <Hyperlink NavigateUri="http://itextpdf.com/salesfaq/">
+                                <Hyperlink.Inlines>
+                                    <Run Text="Commercial usage terms of the iTextSharp Library."/>
+                                </Hyperlink.Inlines>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="RequestNavigate">
+                                        <i:InvokeCommandAction Command="{Binding RequestNavigateCmd}" 
+                                                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Hyperlink}}, Path=NavigateUri}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Margin="10,0,0,1">
+                            <Hyperlink NavigateUri="http://www.apache.org/licenses/LICENSE-2.0">
+                                <Hyperlink.Inlines>
+                                    <Run Text="Generex is licensed under the Apache License, Version 2.0."/>
+                                </Hyperlink.Inlines>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="RequestNavigate">
+                                        <i:InvokeCommandAction Command="{Binding RequestNavigateCmd}" 
+                                                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Hyperlink}}, Path=NavigateUri}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

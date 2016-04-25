@@ -1,0 +1,210 @@
+﻿<Window x:Class="EasyPasswordRecoveryPDF.Views.AddRegexView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EasyPasswordRecoveryPDF.Views"
+        xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        xmlns:defines="clr-namespace:EasyPasswordRecoveryPDF.Common"
+        mc:Ignorable="d"
+        Icon="/Resources/Icons/PdfLogo128x128.ico"
+        Title="Regular Expression Editor"
+        Height="700" Width="650">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Dictionary/ResourceLibrary.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox   Grid.Row="0"
+                    Margin="5,5,5,5" 
+                    BorderBrush="Blue" 
+                    BorderThickness="1">
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Setter Property="Header">
+                        <Setter.Value>
+                            <TextBlock Text="Specify regular expression"
+                                       Style="{DynamicResource GroupboxHeaderStyle}" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="IsEnabled" Value="True"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <TextBox HorizontalAlignment="Stretch" 
+                     VerticalAlignment="Stretch"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding RegEx.RegEx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}">
+            </TextBox>
+        </GroupBox>
+        <Grid Grid.Row="2" 
+              Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StatusBar Grid.Column="0" 
+                       VerticalAlignment="Bottom" 
+                       Background="LightGray">
+                <StatusBarItem>
+                    <Grid>
+                        <ProgressBar Width="100" 
+                                     Height="20"
+                                     IsIndeterminate="{Binding Path=IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        </ProgressBar>
+                    </Grid>
+                </StatusBarItem>
+                <Separator></Separator>
+                <StatusBarItem>
+                    <Label Content="{Binding Path=Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="12"
+                           HorizontalContentAlignment="Left" 
+                           VerticalAlignment="Center" 
+                           MinWidth="200"
+                           Height="26"></Label>
+                </StatusBarItem>
+            </StatusBar>
+            <StackPanel Grid.Column="1"
+                        Background="LightGray"
+                        Orientation="Horizontal"
+                        FlowDirection="RightToLeft">
+                <Button ToolTip="Cancel add new RegEx"
+                        Width="100"
+                        Height="23"
+                        FontSize="14"
+                        Margin="8,0"
+                        IsCancel="True"
+                        VerticalAlignment="Center"
+                        Command="{Binding CancelCmd}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                        <TextBlock Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="Cancel"></TextBlock>
+                        <Rectangle Margin="10,0,0,0"
+                                   Width="16" 
+                                   Height="16"
+                                   VerticalAlignment="Center"
+                                   Fill="{StaticResource Cancel}"></Rectangle>
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Add new RegEx"
+                        Width="100"
+                        Height="23"
+                        IsDefault="true"
+                        FontSize="14"
+                        Margin="8,0"
+                        VerticalAlignment="Center"
+                        Command="{Binding OkCmd}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal"
+                                FlowDirection="LeftToRight">
+                        <Rectangle Margin="10,0,0,0"
+                                   Width="16" 
+                                   Height="16"
+                                   VerticalAlignment="Center"
+                                   Stretch="Uniform"
+                                   Fill="{StaticResource OK}"></Rectangle>
+                        <TextBlock Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   Text="OK"></TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>                
+        <GroupBox Grid.Row="1"
+                  Margin="5,5,5,5" 
+                  BorderBrush="Blue" 
+                  BorderThickness="1">
+            <GroupBox.Header>
+                <TextBlock Text="Preview matches"
+                           TextWrapping="NoWrap"
+                           Style="{DynamicResource GroupboxHeaderStyle}" />
+            </GroupBox.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="1"                         
+                         ItemsSource="{Binding RegExMatches, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></ListBox>
+                <ToolBar Grid.Row="0" 
+                         Margin="2"
+                         VerticalAlignment="Stretch"
+                         HorizontalAlignment="Stretch">
+                    <Label Margin="2,0,1,0" VerticalAlignment="Center">Nr. of matches to display:</Label>
+                    <xctk:IntegerUpDown Width="100"
+                                        Height="21"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,3,8,3"
+                                        DisplayDefaultValueOnEmptyText="True"
+                                        DefaultValue="{x:Static defines:Constants.DefaultMaxRowsRegEx}"
+                                        Maximum="{Binding MaxMaxRows, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="{Binding MinMaxRows, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Value="{Binding MaxRows, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Separator></Separator>
+                    <Button ToolTip="Start preview process."
+                            Margin="8,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding StartCmd}">
+                        <StackPanel HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Orientation="Horizontal"
+                                    FlowDirection="RightToLeft">
+                            <TextBlock Margin="1,0,0,0"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="NoWrap"
+                                       Text="Start"></TextBlock>
+                            <Rectangle  Margin="5,0,0,0"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        Width="16" 
+                                        Height="16"
+                                        VerticalAlignment="Center"
+                                        Fill="{StaticResource Start}">
+                                <Rectangle.RenderTransform>
+                                    <RotateTransform Angle="180"></RotateTransform>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </StackPanel>
+                    </Button>
+                    <Separator></Separator>
+                    <Button ToolTip="Stop preview process."
+                            Margin="8,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding StopCmd}">
+                        <StackPanel HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Orientation="Horizontal"
+                                    FlowDirection="RightToLeft">
+                            <TextBlock Margin="1,0,0,0"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="NoWrap"
+                                       Text="Stop"></TextBlock>
+                            <Rectangle Margin="5,0,0,0"
+                                       Width="16" 
+                                       Height="16"
+                                       VerticalAlignment="Center"
+                                       Fill="{StaticResource Stop}"></Rectangle>
+                        </StackPanel>
+                    </Button>
+                </ToolBar>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

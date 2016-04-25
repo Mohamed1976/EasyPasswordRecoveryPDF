@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="EasyPasswordRecoveryPDF.Views.SmartManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:behaviors="clr-namespace:EasyPasswordRecoveryPDF.Behaviors"
+             xmlns:local="clr-namespace:EasyPasswordRecoveryPDF.Views"
+             mc:Ignorable="d" 
+             Background="LightGray"
+             d:DesignHeight="500" d:DesignWidth="700">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Dictionary/ResourceLibrary.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <GroupBox Margin="5,5,5,5" 
+              BorderBrush="Blue"
+              BorderThickness="1">
+        <GroupBox.Header>
+            <TextBlock Text="Password expressions"
+                       TextWrapping="NoWrap"
+                       Style="{DynamicResource GroupboxHeaderStyle}" />
+        </GroupBox.Header>
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <DataGrid Margin="5"
+                      SelectedIndex="0"
+                      SelectedItem="{Binding SelectedExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding PasswordIterator, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                      behaviors:DisplayRowNumberBehavior.DisplayRowNumberOffset="1"
+                      behaviors:DisplayRowNumberBehavior.DisplayRowNumber="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="70*" 
+                                        Header="Password expression" 
+                                        Binding="{Binding RegEx, Mode=OneWay}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="65" 
+                                        Header="Progress">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Margin" Value="0,0,2,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Progress" 
+                                     Mode="OneWay" 
+                                     UpdateSourceTrigger="PropertyChanged">
+                            </Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+                <i:Interaction.Behaviors>
+                    <behaviors:DatagridScrollToViewBehaviors></behaviors:DatagridScrollToViewBehaviors>
+                </i:Interaction.Behaviors>
+            </DataGrid>
+            <StackPanel Margin="0,5,5,0" 
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.RowSpan="2">
+                <Button Style="{x:Null}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        ToolTip="Add new RegEx"
+                        Margin="0,2,0,0" 
+                        Command="{Binding AddCmd}">
+                    <Rectangle Width="30"
+                               Height="30"
+                               HorizontalAlignment="Center"
+                               Fill="{StaticResource Plus}"></Rectangle>
+                </Button>
+                <Button Style="{x:Null}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        ToolTip="Remove RegEx"  
+                        Margin="0,2,0,0" 
+                        Command="{Binding RemoveCmd}">
+                    <Rectangle Width="30"
+                               Height="30"
+                               HorizontalAlignment="Center"
+                               Fill="{StaticResource Minus}"></Rectangle>
+                </Button>
+                <Button Style="{x:Null}"                                                
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        ToolTip="Move selected RegEx up the list"  
+                        Margin="0,2,0,0" 
+                        Command="{Binding MoveUpCmd}">
+                    <Rectangle Width="30"
+                               Height="30"
+                               HorizontalAlignment="Center"
+                               Fill="{StaticResource Up}">
+                    </Rectangle>
+                </Button>
+                <Button Style="{x:Null}"                                                
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        ToolTip="Move selected RegEx down the list"
+                        Margin="0,2,0,0" 
+                        Command="{Binding MoveDownCmd}">
+                    <Rectangle Width="30"
+                               RenderTransformOrigin="0.5,0.5"
+                               Height="30"
+                               HorizontalAlignment="Center"
+                               Fill="{StaticResource Up}">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="180"></RotateTransform>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </GroupBox>
+</UserControl>
