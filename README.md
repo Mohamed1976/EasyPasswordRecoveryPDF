@@ -1,12 +1,11 @@
 # EasyPasswordRecoveryPDF
-PDF password recovery tool, The smart, the brute and the list. 
-
-The application can be started from here. <a href="http://www.codeproject.com/Articles/1045296/NVMSharp" target="_blank">here</a>.
+PDF password recovery tool, The smart, the brute and the list.
 
 This password recovery tool is a Windows 10 desktop app (.Net 4.6) which provides an effective way of recovering PDF passwords.
 
-<img alt="Dictionaries" src="https://cdn.rawgit.com/Mohamed1976/EasyPasswordRecoveryPDF/master/EasyPasswordRecoveryPDF/publish/publish.htm" />
 
+
+<img alt="Dictionaries" src="https://cdn.rawgit.com/Mohamed1976/EasyPasswordRecoveryPDF/master/EasyPasswordRecoveryPDF/publish/publish.htm" />
 
 
 <img alt="Regular expressions" src="https://cloud.githubusercontent.com/assets/15641092/14800611/1820bd9c-0b43-11e6-8863-36e1ad4abb45.png" />
