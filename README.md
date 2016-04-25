@@ -17,3 +17,4 @@ Easy Password Recovery PDF
 
 <img alt="PDF properties view" src="https://cloud.githubusercontent.com/assets/15641092/14801193/d2ec3e4a-0b47-11e6-91b9-83d2203ab3f4.png" />
 
+<img alt="RegEx editor view" src="https://cloud.githubusercontent.com/assets/15641092/14801345/e4aa506c-0b48-11e6-8dab-298991f580f3.png" />
