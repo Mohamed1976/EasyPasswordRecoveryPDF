@@ -5,4 +5,7 @@ This password recovery tool is a Windows 10 desktop app (.Net 4.6) which provide
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14799987/5c83744c-0b3f-11e6-96ee-733fa5d8f770.png" />
 
+By clicking the lock icon, you can manually enter a password, after which the password can be validated by clicking the validate button.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14802465/3efc7894-0b51-11e6-83a3-04ddabe1a522.png" />
 
