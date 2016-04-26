@@ -17,3 +17,8 @@ You can add a new regular expression by clicking the plus button, which opens th
 The regular expression editor allows you to preview the matches by pressing the start button.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801345/e4aa506c-0b48-11e6-8dab-298991f580f3.png" />
+
+And last but not least, you can use the Brute force editor. It allows you to generate all possible passwords for a particular charset and password length. Brute force iterations are particularly effective for passwords that only consist of digits. When you press the preview button in the Brute force editor, a summary of the used charset and the expected iteration count is shown.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800775/5cb5e63e-0b44-11e6-97fd-688c29171823.png" />
+
