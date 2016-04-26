@@ -9,3 +9,6 @@ By clicking the lock icon, you can manually enter a password, after which the pa
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14802465/3efc7894-0b51-11e6-83a3-04ddabe1a522.png" />
 
+An interesting feature of this application is the Smart editor. This editor allows you to specify a regular expression which can then be used to generate passwords. The Smart editor is shown below.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800611/1820bd9c-0b43-11e6-8863-36e1ad4abb45.png" />
