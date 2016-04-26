@@ -9,6 +9,10 @@ By clicking the lock icon, you can manually enter a password, after which the pa
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14802465/3efc7894-0b51-11e6-83a3-04ddabe1a522.png" />
 
+You can view the PDF details by double clicking the PDF entry in the PDF file datagrid.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801193/d2ec3e4a-0b47-11e6-91b9-83d2203ab3f4.png" />
+
 An interesting feature of this application is the Smart editor. This editor allows you to specify a regular expression which can then be used to generate passwords. The Smart editor is shown below.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800611/1820bd9c-0b43-11e6-8863-36e1ad4abb45.png" />
