@@ -34,4 +34,4 @@ This application uses two external libraries. It uses the itextsharp library to 
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801070/db6952c0-0b46-11e6-951c-00abbb7568bf.png" />
 
-
+P.S. More details about this app <a href="http://www.codeproject.com/Articles/MohamedKalmoua#Article" target="_blank">here</a>.
