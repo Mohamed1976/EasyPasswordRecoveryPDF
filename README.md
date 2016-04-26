@@ -29,3 +29,9 @@ For example when you only choose digits in the Brute force editor and you set th
 The Settings view allows you to modify dictionary passwords to lowercase, UPPERCASE and Titelcase.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800933/ac36ec84-0b45-11e6-9ee6-274615aa5348.png" />
+
+This application uses two external libraries. It uses the itextsharp library to retrieve the hashed user and owner password, which is a little overkill. In the future the itextsharp library will be replaced by a more compact PDF parser, if you have any suggestions, please let me know. The second library it uses, is the Generex library, which is used to generate string matches for a given regex.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801070/db6952c0-0b46-11e6-951c-00abbb7568bf.png" />
+
+
