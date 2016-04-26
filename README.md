@@ -26,6 +26,6 @@ For example when you only choose digits in the Brute force editor and you set th
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14819574/02fb33b8-0bc3-11e6-998e-cc759451049d.png" />
 
+The Settings view allows you to modify dictionary passwords to lowercase, UPPERCASE and Titelcase.
 
-
-
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800933/ac36ec84-0b45-11e6-9ee6-274615aa5348.png" />
