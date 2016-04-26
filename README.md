@@ -12,3 +12,8 @@ By clicking the lock icon, you can manually enter a password, after which the pa
 An interesting feature of this application is the Smart editor. This editor allows you to specify a regular expression which can then be used to generate passwords. The Smart editor is shown below.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800611/1820bd9c-0b43-11e6-8863-36e1ad4abb45.png" />
+
+You can add a new regular expression by clicking the plus button, which opens the regular expression editor shown below.
+The regular expression editor allows you to preview the matches by pressing the start button.
+
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801345/e4aa506c-0b48-11e6-8dab-298991f580f3.png" />
