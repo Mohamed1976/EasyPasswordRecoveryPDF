@@ -271,7 +271,7 @@ namespace EasyPasswordRecoveryPDF.ViewModels
                 Status = "Please select a PDF file to decrypt.";
                 SetErrors("SelectedFile", new List<ValidationResult>() { new ValidationResult(false, Status) });
             }
-            else if (!SelectedFile.IsEncrypted)
+            else if (!SelectedFile.EncryptionRecordInfo.isEncrypted)
             {
                 Status = "No encryption dictionary found in PDF.";
             }
@@ -302,8 +302,8 @@ namespace EasyPasswordRecoveryPDF.ViewModels
             {
                 string errormsg = string.Empty;
                 IPasswordIterator passwordIterator = SelectedTabItem.PasswordIterator;
-                if (passwordIterator.Initialize(SelectedFile.PasswordCharset,
-                    SelectedFile.MaxPasswordSize,
+                if (passwordIterator.Initialize(SelectedFile.EncryptionRecordInfo.PasswordCharset,
+                    SelectedFile.EncryptionRecordInfo.MaxPasswordSize,
                     ref errormsg) == Constants.Success)
                 {
                     IsBusy = true;

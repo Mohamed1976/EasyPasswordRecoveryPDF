@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using iTextSharp.text.pdf;
 using EasyPasswordRecoveryPDF.Common;
-using EasyPasswordRecoveryPDF.Pdf;
 using EasyPasswordRecoveryPDF.Pdf.Decryption.Interfaces;
 using EasyPasswordRecoveryPDF.Pdf.Decryption;
 
@@ -16,7 +15,13 @@ namespace EasyPasswordRecoveryPDF.Model
         public PdfFile(string filename)
         {
             Info = new FileInfo(filename);
-            EncryptionRecordInfo = new EncryptionRecord() { encryptionType = PdfEncryptionType.None };
+            EncryptionRecordInfo = new EncryptionRecord()
+            {
+                isEncrypted = false,
+                PasswordCharset = CharsetEncoding.Ascii,
+                encryptionType = PdfEncryptionType.None,
+                MaxPasswordSize = Constants.MaxPasswordSize
+            };
         }
 
         #endregion
@@ -26,24 +31,66 @@ namespace EasyPasswordRecoveryPDF.Model
         public int Open(ref string errorMsg)
         {
             int result = Constants.Failure;
+            int cryptoMode = 0;
 
             try
             {
-                PdfInfoReader pdfInfoReader = new PdfInfoReader(Info.FullName);
-                pdfInfoReader.GetEncryptionProperties(ref encryptionRecordInfo);
-                IsEncrypted = EncryptionRecordInfo.encryptionType != PdfEncryptionType.None;
-                if (IsEncrypted)
-                {   //Check if PDF password is empty;
-                    IDecryptor pdfDecryptor = DecryptorFactory.Get(EncryptionRecordInfo);
-                    PasswordValidity passwordValidity = pdfDecryptor.ValidatePassword(string.Empty, 
-                        ValidationMode.ValidateUserPassword | ValidationMode.ValidateOwnerPassword);
-                    UserPasswordIsSet = 
-                        (passwordValidity & PasswordValidity.UserPasswordIsValid) != PasswordValidity.UserPasswordIsValid;
-                    OwnerPasswordIsSet = 
-                        (passwordValidity & PasswordValidity.OwnerPasswordIsValid) != PasswordValidity.OwnerPasswordIsValid;
+                PdfReader pdfReader = new PdfReader(Info.FullName, 
+                    out encryptionRecordInfo.pdfVersion, 
+                    out encryptionRecordInfo.documentID, 
+                    out encryptionRecordInfo.uValue, 
+                    out encryptionRecordInfo.oValue, 
+                    out encryptionRecordInfo.pValue, 
+                    out encryptionRecordInfo.rValue, 
+                    out cryptoMode, 
+                    out encryptionRecordInfo.isEncrypted, 
+                    out encryptionRecordInfo.keyLength);
 
-                    MaxPasswordSize = EncryptionRecordInfo.MaxPasswordSize;
-                    PasswordCharset = EncryptionRecordInfo.PasswordCharset;
+                if (encryptionRecordInfo.isEncrypted && 
+                    (encryptionRecordInfo.uValue == null || encryptionRecordInfo.oValue == null))
+                {
+                    errorMsg = "PDF encryption type not supported.";
+                }
+                else if(encryptionRecordInfo.isEncrypted)
+                {
+                    //When using AES encryption, the option is available to refrain from encrypting the metadata.
+                    encryptionRecordInfo.metadataIsEncrypted = 
+                        (cryptoMode & PdfWriter.DO_NOT_ENCRYPT_METADATA) != PdfWriter.DO_NOT_ENCRYPT_METADATA;
+
+                    if ((cryptoMode & PdfWriter.ENCRYPTION_MASK) == PdfWriter.STANDARD_ENCRYPTION_40)
+                    {
+                        encryptionRecordInfo.encryptionType = PdfEncryptionType.StandardEncryption40Bit;
+                        encryptionRecordInfo.metadataIsEncrypted = true;
+                    }
+                    else if ((cryptoMode & PdfWriter.ENCRYPTION_MASK) == PdfWriter.STANDARD_ENCRYPTION_128)
+                    {
+                        encryptionRecordInfo.encryptionType = PdfEncryptionType.StandardEncryption128Bit;
+                        encryptionRecordInfo.metadataIsEncrypted = true;
+                    }
+                    else if ((cryptoMode & PdfWriter.ENCRYPTION_MASK) == PdfWriter.ENCRYPTION_AES_128)
+                    {
+                        encryptionRecordInfo.encryptionType = PdfEncryptionType.AesEncryption128Bit;
+                    }
+                    else if ((cryptoMode & PdfWriter.ENCRYPTION_MASK) == PdfWriter.ENCRYPTION_AES_256)
+                    {
+                        encryptionRecordInfo.encryptionType = PdfEncryptionType.AesEncryption256Bit;
+                        encryptionRecordInfo.MaxPasswordSize = Constants.MaxPasswordSizeV2;
+                        encryptionRecordInfo.PasswordCharset = CharsetEncoding.Unicode;
+                    }
+                    else if ((cryptoMode & PdfWriter.ENCRYPTION_MASK) == PdfWriter.ENCRYPTION_AES_256_ISO)
+                    {
+                        encryptionRecordInfo.encryptionType = PdfEncryptionType.AesIsoEncryption256Bit;
+                        encryptionRecordInfo.MaxPasswordSize = Constants.MaxPasswordSizeV2;
+                        encryptionRecordInfo.PasswordCharset = CharsetEncoding.Unicode;
+                    }
+
+                    IDecryptor pdfDecryptor = DecryptorFactory.Get(EncryptionRecordInfo);                    
+                    PasswordValidity passwordValidity = pdfDecryptor.ValidatePassword(string.Empty,
+                        ValidationMode.ValidateUserPassword | ValidationMode.ValidateOwnerPassword);
+                    UserPasswordIsSet =
+                        (passwordValidity & PasswordValidity.UserPasswordIsValid) != PasswordValidity.UserPasswordIsValid;
+                    OwnerPasswordIsSet =
+                        (passwordValidity & PasswordValidity.OwnerPasswordIsValid) != PasswordValidity.OwnerPasswordIsValid;
                 }
 
                 result = Constants.Success;
@@ -85,8 +132,8 @@ namespace EasyPasswordRecoveryPDF.Model
         {
             string hexValue = string.Empty;
             Dictionary<string, string> EncryptionInfo = new Dictionary<string, string>();
-            EncryptionInfo.Add("IsEncrypted", IsEncrypted.ToString());
-            if (IsEncrypted)
+            EncryptionInfo.Add("IsEncrypted", EncryptionRecordInfo.isEncrypted.ToString());
+            if (EncryptionRecordInfo.isEncrypted)
             {
                 EncryptionInfo.Add("pdfVersion", EncryptionRecordInfo.pdfVersion.ToString());
                 EncryptionInfo.Add("rValue", EncryptionRecordInfo.rValue.ToString());
@@ -140,13 +187,6 @@ namespace EasyPasswordRecoveryPDF.Model
 
         #region [ Properties ]
 
-        private bool encrypted = false;
-        public bool IsEncrypted
-        {
-            get { return encrypted; }
-            private set { SetProperty(ref this.encrypted, value); }
-        }
-
         private bool userPasswordIsSet = false;
         public bool UserPasswordIsSet
         {
@@ -173,20 +213,6 @@ namespace EasyPasswordRecoveryPDF.Model
         {
             get { return recoveredOwnerPassword; }
             private set { SetProperty(ref this.recoveredOwnerPassword, value); }
-        }
-
-        private int maxPasswordSize = 0;
-        public int MaxPasswordSize
-        {
-            get { return maxPasswordSize; }
-            private set { SetProperty(ref this.maxPasswordSize, value); }
-        }
-
-        private CharsetEncoding passwordCharset = CharsetEncoding.None;
-        public CharsetEncoding PasswordCharset
-        {
-            get { return passwordCharset; }
-            private set { SetProperty(ref this.passwordCharset, value); }
         }
 
         private FileInfo fileInfo = null;

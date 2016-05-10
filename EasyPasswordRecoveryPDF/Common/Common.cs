@@ -76,6 +76,7 @@ namespace EasyPasswordRecoveryPDF.Common
 
     public struct EncryptionRecord
     {
+        public bool isEncrypted;
         public char pdfVersion;
         public long fileLength;
         public byte[] documentID;

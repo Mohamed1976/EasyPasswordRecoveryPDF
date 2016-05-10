@@ -81,7 +81,7 @@ namespace EasyPasswordRecoveryPDF.Pdf.Decryption
             PrepareRC4Key(mkey, 0, mkey.Length);
             EncryptRC4(PasswordPadding, 0, PasswordPadding.Length, userKey);
 
-            if (arrayMath.ArraysAreEqual(userKey, EncryptionInfo.uValue))
+            if (arrayMath.ArraysAreEqual(userKey, EncryptionInfo.uValue, mkey.Length))
                 return true;
             else
                 return false;

@@ -342,6 +342,7 @@ namespace EasyPasswordRecoveryPDF.Model
         {
             char ch = '\0';
 
+            charactersToUse.BeginUpdate();
             string[] charsets = UnicodeCharset.Split(comma, StringSplitOptions.RemoveEmptyEntries);
             foreach(string charset in charsets)
             {
@@ -368,6 +369,7 @@ namespace EasyPasswordRecoveryPDF.Model
                     }
                 }
             }
+            charactersToUse.EndUpdate();
         }
 
         private void AddCharset(ref ObservableCollectionExt<CharExt> charactersToUse, char [] charset)
@@ -380,6 +382,7 @@ namespace EasyPasswordRecoveryPDF.Model
 
         private void InitializeAsciiCharset()
         {
+            charactersToUse.BeginUpdate();
             if ((PasswordCharset & Charset.LowerCaseLetters) == Charset.LowerCaseLetters)
             {
                 AddCharset(ref charactersToUse, LOWER_CASE_LETTERS);
@@ -404,6 +407,7 @@ namespace EasyPasswordRecoveryPDF.Model
             {
                 AddCharset(ref charactersToUse, SPACE);
             }
+            charactersToUse.EndUpdate();
         }
 
         #endregion
