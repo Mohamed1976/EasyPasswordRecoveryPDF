@@ -26,7 +26,7 @@ And last but not least, you can use the Brute force editor. It allows you to gen
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800775/5cb5e63e-0b44-11e6-97fd-688c29171823.png" />
 
-For example when you only choose digits in the Brute force editor and you set the password sweep direction from 1 to 9 digits, the following Brute force iterations will be performed.
+For example when the password charset only consists of digits and the password length ranges between one and nine digits, the following Brute force iterations will be performed.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14819574/02fb33b8-0bc3-11e6-998e-cc759451049d.png" />
 
