@@ -1,7 +1,7 @@
 # EasyPasswordRecoveryPDF
 <B>PDF password recovery tool, The smart, the brute and the list.</B>
 
-This password recovery tool is a Windows 10 desktop app (.Net 4.6) which provides an effective way of recovering PDF passwords. It uses the itextsharp library to retrieve the hashed user and owner password, after which these hashed passwords are compared to the by the user supplied passwords using dedicated algorithms (including the latest PDF encryption algorithm ISO 32000-2). The user can supply passwords in four different ways, by clicking the lock icon, using dictionaries, regular expressions and using a brute force approach. The dictionary editor is shown below.
+This password recovery tool is a Windows 10 desktop application which provides a way of recovering PDF passwords. It uses the itextsharp library to retrieve the hashed user and owner password. After which the retrieved hashed passwords are compared to different passwords. The application user can supply passwords in four different ways, manually by clicking the lock icon, using dictionaries, regular expressions and using a brute force approach. The dictionary editor is shown below.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14799987/5c83744c-0b3f-11e6-96ee-733fa5d8f770.png" />
 
@@ -15,7 +15,7 @@ You can view the PDF details by double clicking the PDF entry in the PDF file da
 
 An interesting feature of this application is the Smart editor. This editor allows you to specify a regular expression which can then be used to generate passwords. The Smart editor is shown below.
 
-<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800611/1820bd9c-0b43-11e6-8863-36e1ad4abb45.png" />
+<img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/15196565/39774d08-17cd-11e6-8509-08c9a715148d.png" />
 
 You can add a new regular expression by clicking the plus button, which opens the regular expression editor shown below.
 The regular expression editor allows you to preview the matches by pressing the start button.
@@ -34,7 +34,7 @@ The Settings view allows you to modify dictionary passwords to lowercase, UPPERC
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14800933/ac36ec84-0b45-11e6-9ee6-274615aa5348.png" />
 
-This application uses two external libraries. It uses the itextsharp library to retrieve the hashed user and owner password, which is a little overkill. In the future the itextsharp library will be replaced by a more compact PDF parser, if you have any suggestions, please let me know. The second library it uses, is the Generex library, which is used to generate string matches for a given regex.
+This application uses two external libraries. It uses the itextsharp library to retrieve the hashed user and owner password, which is a little overkill. In the future the itextsharp library will be replaced by a more compact PDF parser, if you have any suggestions, please let me know. The second library it uses, is the Generex library, which is used to generate strings matching the specified regular expressions.
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801070/db6952c0-0b46-11e6-951c-00abbb7568bf.png" />
 
