@@ -40,6 +40,8 @@ This application uses two external libraries. It uses the itextsharp library to 
 
 The clickonce application can be launched from <a href="https://cdn.rawgit.com/Mohamed1976/EasyPasswordRecoveryPDF/master/EasyPasswordRecoveryPDF/publish/publish.htm" target="_blank">here</a>.
 
+The clickonce application can also be launched from <a href="https://cdn.jsdelivr.net/gh/Mohamed1976/EasyPasswordRecoveryPDF@master/EasyPasswordRecoveryPDF/publish/publish.htm" target="_blank">here</a>.
+
 Password dictionaries can be found <a href="https://wiki.skullsecurity.org/Passwords" target="_blank">here</a>, <a href="https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm" target="_blank">here</a>
 and <a href="https://github.com/danielmiessler/SecLists" target="_blank">here</a>.
 
