@@ -38,9 +38,7 @@ This application uses two external libraries. It uses the itextsharp library to 
 
 <img alt="screenshot" src="https://cloud.githubusercontent.com/assets/15641092/14801070/db6952c0-0b46-11e6-951c-00abbb7568bf.png" />
 
-The clickonce application can be launched from <a href="https://cdn.rawgit.com/Mohamed1976/EasyPasswordRecoveryPDF/master/EasyPasswordRecoveryPDF/publish/publish.htm" target="_blank">here</a>.
-
-The clickonce application can also be launched from <a href="https://cdn.staticaly.com/gh/Mohamed1976/EasyPasswordRecoveryPDF/master/EasyPasswordRecoveryPDF/publish/publish.htm" target="_blank">here</a>.
+The clickonce application can be launched from <a href="https://github.com/Mohamed1976/EasyPasswordRecoveryPDF/blob/master/EasyPasswordRecoveryPDF/publish/setup.exe" target="_blank">here</a>. After you have downloaded the setup.exe to your local Windows 10 computer, run the setup.exe and it will guide you through the installation process. Alternatively you can clone the project and build it yourself.
 
 Password dictionaries can be found <a href="https://wiki.skullsecurity.org/Passwords" target="_blank">here</a>, <a href="https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm" target="_blank">here</a>
 and <a href="https://github.com/danielmiessler/SecLists" target="_blank">here</a>.
